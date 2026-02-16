@@ -323,7 +323,7 @@
                 <h3 style="margin:20px 0 10px; font-size:0.9rem;">Python Hook</h3>
                 <pre style="background:#000; padding:10px; border-radius:8px; font-size:0.75rem; overflow-x:auto;">
 import requests
-url = "http://localhost:5001/api/chat"
+url = "/api/chat"
 headers = {"X-Chaka-API-Key": "Chaka_Supreme_Access"}
 payload = {
   "message": "Hello Chaka!", 
@@ -492,7 +492,7 @@ fetch(url, {
         }
 
         async function clearChat() {
-            await fetch('http://localhost:5001/api/clear', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
+            await fetch('/api/clear', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
             chatWindow.innerHTML = '<div class="message ai">History wiped. Chaka eyes are clear.</div>';
         }
     </script>
