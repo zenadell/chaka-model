@@ -502,6 +502,17 @@ fetch(url, {
             await fetch('/api/clear', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
             chatWindow.innerHTML = '<div class="message ai">History wiped. Chaka eyes are clear.</div>';
         }
+
+        // DYNAMIC URL INJECTION FOR DEVELOPER HUB
+        window.onload = () => {
+            const currentUrl = window.location.origin + "/api/chat";
+            const codeBlocks = document.querySelectorAll('pre');
+            codeBlocks.forEach(block => {
+                if (block.innerText.includes('/api/chat')) {
+                    block.innerHTML = block.innerHTML.replace(/\/api\/chat/g, currentUrl);
+                }
+            });
+        };
     </script>
 
 </body>
