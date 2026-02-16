@@ -3,7 +3,7 @@
 Welcome to the **Chaka AI Platform**. You can now leverage Chaka's high-precision 4-phase logic audit in your own projects.
 
 ## API Endpoint
-`POST http://localhost:5001/api/chat`
+`[DEPLOYED_URL]/api/chat` (e.g., `https://temple2025-chaka-model.hf.space/api/chat`)
 
 ## Authentication
 Every request must include the `X-Chaka-API-Key` header with a valid key.
@@ -45,7 +45,7 @@ Chaka uses a **Foundation-First** architecture.
 ```python
 import requests
 
-url = "http://localhost:5001/api/chat"
+url = "/api/chat" # Replace with full URL if calling externally
 headers = {
     "X-Chaka-API-Key": "your-key-here",
     "Content-Type": "application/json"
@@ -65,7 +65,7 @@ print(f"Answer: {data['response']}")
 
 ### Node.js (using fetch)
 ```javascript
-const url = "http://localhost:5001/api/chat";
+const url = "/api/chat"; // Replace with full URL if calling externally
 const payload = {
     message: "Who marched into the tent?",
     custom_prompt: "You are a precise librarian.",

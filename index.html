@@ -323,23 +323,30 @@
                 <h3 style="margin:20px 0 10px; font-size:0.9rem;">Python Hook</h3>
                 <pre style="background:#000; padding:10px; border-radius:8px; font-size:0.75rem; overflow-x:auto;">
 import requests
-url = "/api/chat"
+
+# Set URL and Key
+url = "/api/chat" 
 headers = {"X-Chaka-API-Key": "Chaka_Supreme_Access"}
+
 payload = {
   "message": "Hello Chaka!", 
-  "model": "chaka-medium" # Options: chaka-low, chaka-medium, chaka-high, chaka-ultimate
+  "model": "chaka-medium" 
 }
+
 res = requests.post(url, json=payload, headers=headers)
 print(res.json())</pre>
 
                 <h3 style="margin:20px 0 10px; font-size:0.9rem;">Node.js Hook</h3>
                 <pre style="background:#000; padding:10px; border-radius:8px; font-size:0.75rem; overflow-x:auto;">
-fetch(url, {
-  method: 'POST',
-  headers: {
+const url = "/api/chat";
+const headers = {
     'Content-Type': 'application/json',
     'X-Chaka-API-Key': 'Chaka_Supreme_Access'
-  },
+};
+
+fetch(url, {
+  method: 'POST',
+  headers: headers,
   body: JSON.stringify({
     message: "Hello World",
     model: "chaka-medium" // Options: chaka-low, chaka-medium, chaka-high, chaka-ultimate
