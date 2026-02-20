@@ -195,8 +195,8 @@ def chat():
         "max_tokens": 4096,
     }
 
-    # Model-Specific Logic (Force Audit Monologue)
-    if model_id in ["llama-3.3-70b-versatile", "meta-llama/llama-4-maverick-17b-128e-instruct", "chaka-medium", "chaka-high"]:
+    # Model-Specific Logic (Force Audit Monologue for Reasoning models)
+    if requested_model in ["chaka-medium", "chaka-high", "chaka-ultimate"] or model_id in ["llama-3.3-70b-versatile", "meta-llama/llama-4-maverick-17b-128e-instruct", "openai/gpt-oss-120b"]:
         # We enforce the format so we can extract thoughts properly
         audit_instruction = "\nIMPORTANT: Start your response with THOUGHT_PROCESS: ... followed by FINAL_ANSWER: ..."
         messages[0] = {"role": "system", "content": final_system_content + audit_instruction}
@@ -210,11 +210,22 @@ def chat():
             raw_response = completion.choices[0].message.content
             thought, answer = extract_thought(raw_response)
             
-            # Save only the CLEAN string answer to history (Vision models sometimes return complex objects)
+            # Save CLEAN answer to history. 
+            # STRATEGY: Strip the image data from the user message we just sent to prevent 413 errors on next turn.
+            # The AI already "saw" it and its text response now provides the context for future messages.
+            last_user_msg = history[-1]
+            if isinstance(last_user_msg['content'], list):
+                # Replace list content with just the text part for history persistence
+                text_only = ""
+                for part in last_user_msg['content']:
+                    if part['type'] == 'text':
+                        text_only += part['text']
+                last_user_msg['content'] = text_only if text_only else "Sent an image."
+            
             history.append({"role": "assistant", "content": answer})
             
             if len(history) > 20:
-                sessions[session_id] = [history[0]] + history[-19:] # Preserve dynamic system prompt
+                sessions[session_id] = [history[0]] + history[-19:] 
             
             return jsonify({
                 "response": answer, 
