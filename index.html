@@ -325,7 +325,7 @@
 import requests
 
 # Set URL and Key
-url = "/api/chat" 
+url = "[YOUR_RENDER_URL]/api/chat" 
 headers = {"X-Chaka-API-Key": "Chaka_Supreme_Access"}
 
 payload = {
@@ -338,7 +338,7 @@ print(res.json())</pre>
 
                 <h3 style="margin:20px 0 10px; font-size:0.9rem;">Node.js Hook</h3>
                 <pre style="background:#000; padding:10px; border-radius:8px; font-size:0.75rem; overflow-x:auto;">
-const url = "/api/chat";
+const url = "[YOUR_RENDER_URL]/api/chat";
 const headers = {
     'Content-Type': 'application/json',
     'X-Chaka-API-Key': 'Chaka_Supreme_Access'
@@ -508,8 +508,8 @@ fetch(url, {
             const currentUrl = window.location.origin + "/api/chat";
             const codeBlocks = document.querySelectorAll('pre');
             codeBlocks.forEach(block => {
-                if (block.innerText.includes('/api/chat')) {
-                    block.innerHTML = block.innerHTML.replace(/\/api\/chat/g, currentUrl);
+                if (block.innerText.includes('[YOUR_RENDER_URL]/api/chat')) {
+                    block.innerHTML = block.innerHTML.replace(/\[YOUR_RENDER_URL\]\/api\/chat/g, currentUrl);
                 }
             });
         };
