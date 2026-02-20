@@ -237,8 +237,12 @@ def chat():
         except RateLimitError:
             time.sleep(2)
         except Exception as e:
+            # Revert history if the API fails so the "broken" turn doesn't corrupt the pipeline
+            history.pop() 
             return jsonify({"error": str(e)}), 400
 
+    # If we exhaust max retries
+    history.pop()
     return jsonify({"error": "I am currently at maximum capacity."}), 429
 
 @app.route('/api/clear', methods=['POST'])

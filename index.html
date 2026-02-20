@@ -557,6 +557,9 @@ fetch(url, {
                     block.innerHTML = block.innerHTML.replace(/\[YOUR_RENDER_URL\]\/api\/chat/g, currentUrl);
                 }
             });
+
+            // Auto-purge chat every 2 minutes (120 seconds)
+            setInterval(clearChat, 120000);
         };
     </script>
 
