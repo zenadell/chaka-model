@@ -3,7 +3,7 @@
 Welcome to the **Chaka AI Platform**. You can now leverage Chaka's high-precision 4-phase logic audit in your own projects.
 
 ## API Endpoint
-`[DEPLOYED_URL]/api/chat` (e.g., `https://temple2025-chaka-model.hf.space/api/chat`)
+`https://[YOUR-SERVICE-NAME].onrender.com/api/chat`
 
 ## Authentication
 Every request must include the `X-Chaka-API-Key` header with a valid key.
