@@ -49,24 +49,39 @@ MODEL_MAPPING = {
 }
 
 def self_ping():
-    """Background thread to keep the server alive on platforms like Hugging Face"""
+    """Background thread to keep the server alive on platforms like Hugging Face or Render"""
     import threading
     import requests
     import time
     
     def ping_loop():
-        time.sleep(10) # Initial delay
-        port = os.environ.get("PORT", 5001) # Dynamically get port
+        # Initial delay to let the server start
+        time.sleep(20) 
+        
+        # Get dynamic configuration
+        port = os.environ.get("PORT", 5001)
+        external_url = os.environ.get("SELF_PING_URL") # Recommended for Render/HF
+        
         while True:
             try:
-                # Replace with your actual deployed URL if needed
-                requests.get(f"http://127.0.0.1:{port}/health")
-                print(f"✅ Self-ping successful on port {port}")
+                # 1. Internal Local Ping
+                requests.get(f"http://127.0.0.1:{port}/health", timeout=5)
+                print(f"✅ Internal self-ping successful on port {port}")
+                
+                # 2. External URL Ping (Primary stay-awake strategy)
+                if external_url:
+                    requests.get(external_url, timeout=10)
+                    print(f"🌐 External self-ping successful: {external_url}")
+                    
             except Exception as e:
-                print(f"⚠️ Self-ping failed: {e}")
-            time.sleep(600) # Ping every 10 minutes
+                print(f"⚠️ Self-ping check-in encountered a minor delay: {e}")
+                
+            # Ping every 5 minutes (300 seconds) to stay ahead of sleep timers
+            time.sleep(300) 
 
-    threading.Thread(target=ping_loop, daemon=True).start()
+    thread = threading.Thread(target=ping_loop, daemon=True)
+    thread.start()
+    print("🚀 Chaka Keep-Alive Engine initialized.")
 
 # Start self-ping checks
 self_ping()
