@@ -55,29 +55,29 @@ def self_ping():
     import time
     
     def ping_loop():
-        # Initial delay to let the server start
-        time.sleep(20) 
+        # Delay to ensure server is fully UP on slow cloud boots
+        time.sleep(30) 
         
-        # Get dynamic configuration
         port = os.environ.get("PORT", 5001)
-        external_url = os.environ.get("SELF_PING_URL") # Recommended for Render/HF
+        # PRIORITIZE: Public Render URL to reset their LB sleep timer
+        external_url = os.environ.get("SELF_PING_URL", "https://chaka-model.onrender.com")
         
         while True:
             try:
-                # 1. Internal Local Ping
-                requests.get(f"http://127.0.0.1:{port}/health", timeout=5)
-                print(f"✅ Internal self-ping successful on port {port}")
-                
-                # 2. External URL Ping (Primary stay-awake strategy)
+                # 1. External Ping (The one that keeps Render/HF active)
                 if external_url:
-                    requests.get(external_url, timeout=10)
-                    print(f"🌐 External self-ping successful: {external_url}")
-                    
-            except Exception as e:
-                print(f"⚠️ Self-ping check-in encountered a minor delay: {e}")
+                    requests.get(external_url, timeout=12)
+                    print(f"🌐 Keep-Alive: External ping success ({external_url})")
                 
-            # Ping every 5 minutes (300 seconds) to stay ahead of sleep timers
-            time.sleep(300) 
+                # 2. Internal Ping (Secondary)
+                requests.get(f"http://127.0.0.1:{port}/health", timeout=5)
+                print(f"✅ Keep-Alive: Internal health check success")
+                
+            except Exception as e:
+                print(f"⚠️ Keep-Alive Engine: Transient check-in delay: {e}")
+                
+            # Aggressive 60-second pulse to prevent aggressive sleep modes
+            time.sleep(60) 
 
     thread = threading.Thread(target=ping_loop, daemon=True)
     thread.start()
